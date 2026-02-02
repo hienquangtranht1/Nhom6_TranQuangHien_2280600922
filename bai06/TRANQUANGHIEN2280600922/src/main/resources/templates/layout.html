@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore App</title>
+    <link th:fragment="link-css" rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link th:fragment="custom-css" rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="d-flex flex-column h-100">
+    
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="/">BOOKSTORE</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/books">List Book</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                            <a class="nav-link" href="/books/add">Add Book</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cart">Cart</a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-light text-primary me-2 btn-sm" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="btn btn-outline-light btn-sm" href="/register">Sign Up</a>
+                        </li>
+                        
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" 
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hello, <span sec:authentication="name" class="fw-bold">User</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button class="dropdown-item text-danger" type="submit">Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container my-4 flex-grow-1">
+        <div th:fragment="content"></div>
+    </div>
+
+    <footer th:fragment="footer" class="footer mt-auto py-3 bg-light text-center border-top">
+        <div class="container">
+            <span class="text-muted">Copyright &copy; <span th:text="${#dates.year(#dates.createNow())}"></span> 
+            <a href="https://www.hutech.edu.vn/" class="text-decoration-none">HUTECH Education</a></span>
+        </div>
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    </footer>
+
+</body>
+</html>
